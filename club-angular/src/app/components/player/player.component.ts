@@ -7,7 +7,6 @@ import { Team } from 'src/app/entities/team';
 import { CommonService } from 'src/app/services/common/common.service';
 import { User } from 'src/app/entities/user';
 import { Message } from 'src/app/entities/message';
-import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
 import { Common } from 'src/app/entities/common';
 
 @Component({
