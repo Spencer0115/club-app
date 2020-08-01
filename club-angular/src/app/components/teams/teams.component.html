@@ -1,0 +1,96 @@
+<div class="container justify-content-center" style="position: relative;">
+  <div class="card border-0">
+      <div class="card-header text-dark bg-white">
+        <div class="row">
+          <div class="col-sm-2 my-1">
+              <button class="btn btn-success font-weight-bold" (click)="addATeam()" type="button">New Team</button>
+            </div>
+            <div class="col-sm-4 ml-auto my-1">
+              <div class="input-group ">
+                  <input class="form-control" type="search"  [(ngModel)]="teamSearch" placeholder="Search Team" aria-label="Search">
+                  <div class="input-group-append">
+                      <span class="btn-outline-success input-group-text" (click)="onTeamSearch()">Search</span>
+                  </div>
+              </div>
+            </div>  
+          </div>         
+      </div>
+  </div>
+
+  <div *ngIf="addTeam === true||updateTeam===true"  id="div-addTeam" class="card"  style="width: 28rem;position:absolute;z-index: 1200">
+    <div class="card-header text-white bg-dark">
+     <h5 *ngIf="updateTeam === false">Add Team</h5>
+     <h5 *ngIf="updateTeam === true">Update Team</h5>
+    </div>
+    <div  *ngIf="updateTeam === true" class="container-fluid text-center text-dark my-2">
+        <h5>{{team.name}}</h5>
+      </div>
+    <img   *ngIf="updateTeam === true" class="align-self-center card-image-big my-2"[src]="picSrc+team.profile" alt="Card image cap">
+
+    <form #teamForm="ngForm" name="teamForm" class="card-body justify-content-center">
+        <div  *ngIf="updateTeam === false" class="form-group">
+        <label for="teamName">Team name</label>
+        <input type="text" (blur)="checkTeam()" [(ngModel)]="team.name" #teamName="ngModel" required minilength="4" name="teamName" class="form-control" id="teamName" placeholder="Enter team name">
+        <small  *ngIf="teamName.invalid && (teamName.dirty || teamName.touched)" class="form-text text-danger">Team name should has at least 4 characters.</small>
+        <small  *ngIf="repeated ==true;" class="form-text text-danger">This name has been used.</small>
+      </div>
+      <div class="form-group">
+        <label for="teamSport">Sport</label>
+        <select [(ngModel)]="team.sport" #teamSport="ngModel" required name="teamSport" class="form-control">
+          <option *ngFor="let sport of sportCommon" value="{{sport.code}}">{{sport.name}}</option>
+        </select>
+        <small  *ngIf="teamSport.invalid && (teamSport.dirty || teamSport.touched)" class="form-text text-danger">Please input sport.</small>
+      </div>
+      <div class="form-group ">
+          <label>Logo Image</label>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input btn-outline-success" (change)="onFileChange($event)">
+            <label class="custom-file-label">{{selectedFile.name}}</label>
+          </div>
+      </div>
+      <div class="row justify-content-center">
+        <button (click)="submitTeam()" class="btn btn-outline-success hid-div-button" [disabled]="!teamForm.valid">Submit</button>
+        <button (click)="cancleAddTeam()" class="btn btn-outline-danger hid-div-button">Cancel</button>
+      </div> 
+    </form>
+  </div>
+
+  <div class="container">
+      <div class="form-inline text-center align-items-start">
+          <div class="col-sm-4 my-2" *ngFor="let team of teams; let i = index">
+          <div class=" card bg-light text-dark border-0  font-weight-light card-focus" style="min-width: 10rem">
+              <div class="card-body p-2 my-0 card-focus">
+              <div class="row text-left mt-2 inline">
+                    <div class="text-left align-content-start ml-1 col">
+                        <h4 class="my-2 text-dark">{{team.name}}</h4>
+                        <h5 class="my-2 text-secondary clearfix">{{team.sportName}}</h5>
+                    </div>
+                    <div class="col ml-auto align-items-center">
+                    <img [routerLink]="['/user/team_club', team.id]" class="card-image-big my-1 float-right"[src]="picSrc+team.profile" alt="Card image cap">
+                  </div>
+              </div>
+              <div class="float-right text-primary align-self-end" ngbDropdown #myDrop="ngbDropdown"  autoClose="outside">
+                  <a style="cursor: pointer;" class="text-primary align-self-end mr-1 font-weight-bold" name="teamOptions" ngbDropdownToggle >Options</a>
+                  <div ngbDropdownMenu aria-labelledby="teamOptions" class="bg-transparent border-0">
+                      <ul class="list-group bg-light list-group-flush">
+                        <li class="options btn-outline-success list-group-item  font-weight-bold" (click)="updateTeamById(team.id)">Update</li>
+                        <li class="options btn-outline-danger list-group-item  font-weight-bold" (click)="deleteTeamById(team.id)">Delete</li>
+                      </ul> 
+                  </div>
+              </div>
+              </div> 
+
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid my-3" *ngIf="totalPage>1">
+      <nav aria-label="Page navigation ">
+        <ul class="pagination text-success justify-content-center">
+          <li [ngClass]="{'disabled':page===1}"class="page-item text-success"><a class="page-link" (click)="toPage(-1)">Previous</a></li>
+          <li  *ngFor="let p of pages, let i= index"class="page-item btn-outline-success" ><a class="page-link " (click)="jumpPage(i+1)" [ngClass]="{'bg-success text-white':page===i+1}">{{i+1}}</a></li>
+          <li [ngClass]="{'disabled':page===totalPage}" class="page-item"><a class="page-link" (click)="toPage(1)">Next</a></li>
+        </ul>
+      </nav>    
+    </div>
+</div>

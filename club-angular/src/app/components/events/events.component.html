@@ -1,0 +1,151 @@
+<div class="container" style="position: relative;">
+    <div class="card border-0">
+        <div class="card-header text-dark bg-white">
+          <div class="row">
+            <div class="form-inline col">
+                <button *ngIf="user.type==='0'" class="btn btn-success ml-2 my-1 font-weight-bold" (click)="addAEvent()" type="button">New Event</button>
+                <div class="input-group form-inline my-1 ml-auto">
+                    <label class="ml-2">Type:</label>
+                    <select [(ngModel)]="type" name="typeFilter" (change)="getEvents()" class="custom-select  ml-2">
+                      <option value="" selected>All</option>
+                      <option *ngFor="let event of eventCommon" value="{{event.code}}" selected>{{event.name}}</option>
+                    </select>
+                    <label class="ml-2">Order:</label>
+                    <select [(ngModel)]="order" name="orderFilter" (change)="getEvents()" class="custom-select ml-2">
+                      <option value="startTime" selected>Start Time</option>
+                      <option value="endTime">End Time</option>
+                    </select>
+                </div>
+            </div>
+              <div class="input-group col-sm-4 float-right my-1">
+                  <input [(ngModel)]="eventSearch" name="eventSearch" class="form-control" type="search"  placeholder="Search Event" aria-label="Search">
+                  <div class="input-group-append">
+                      <span class="btn-outline-success input-group-text" (click)="onEventSearch()">Search</span>
+                  </div>
+              </div>  
+            </div>         
+        </div>
+    </div>
+  
+    <div *ngIf="addEvent === true||updateFlag===true"  id="div-addEvent"class="card bg-light"  style="width: 28rem;position:absolute;z-index: 1200">
+      <div class="card-header text-white bg-dark my-1">
+       <h5 *ngIf="addEvent === true">New Event</h5>
+       <h5 *ngIf="updateFlag === true">Update Event</h5>
+      </div>
+      <form #eventForm="ngForm" name="eventForm" class="card-body">
+          <div class="form-group">
+              <label for="">Type</label>
+              <select [(ngModel)]="event.type" [disabled]="updateFlag === true" #eventType="ngModel" (change)="clearParticipants()" name="eventType" class="custom-select">
+                  <option *ngFor="let event of eventCommon" value="{{event.code}}" selected>{{event.name}}</option>
+                </select>
+          </div>       
+        <div  class="form-group" *ngIf="event.type==='3'">
+          <label for="eventName">Name</label>
+          <input type="text" [(ngModel)]="event.name" #eventName="ngModel" required minilength="4" name="eventName" class="form-control" id="eventName" placeholder="Enter event name">
+          <small  *ngIf="eventName.invalid && (eventName.dirty || eventName.touched)" class="form-text text-danger">Event name should has at least 4 characters.</small>
+       </div>
+       <div  class="form-group">
+        <label for="eventName">Place</label>
+        <input type="text" [(ngModel)]="event.place" #eventPlace="ngModel" required minilength="4" name="eventPlace" class="form-control" id="eventPlace" placeholder="Enter event place">
+        <small  *ngIf="eventPlace.invalid && (eventPlace.dirty || eventPlace.touched)" class="form-text text-danger">Event place should has at least 4 characters.</small>
+     </div>
+        <div class="form-group" ngbDropdown #myDrop="ngbDropdown"  autoClose="outside" *ngIf="event.type==='0' || event.type==='1'">
+          <label for="eventTeam">Teams</label>
+          <input readonly type="text"  [disabled]="updateFlag === true" [(ngModel)]="participants" ngbDropdownToggle  required name="teams" class="form-control" id="teams" placeholder="Select teams">
+          <div class="container my-1" ngbDropdownMenu aria-labelledby="teams">
+              <div class="row form-inline">
+                <div class="col-sm-3 input-group form-inline"  *ngFor="let team of teams; let i = index">
+                    <input class="custom-checkbox ml-1 mr-1" type="checkbox" name="checkTeam" [id]="'check_'+team.id" (click)="selectParticipant($event.target.checked,team.id,team.name)">
+                    <label>{{team.name}}</label>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="form-group" ngbDropdown #myDrop="ngbDropdown"  autoClose="outside" *ngIf="event.type==='2'">
+          <label for="eventPlayers">Players</label>
+          <input readonly type="text" [(ngModel)]="participants" ngbDropdownToggle  required name="players" class="form-control" id="players" placeholder="Select players">
+          <div class="my-1 container" ngbDropdownMenu aria-labelledby="players">
+                  <div class="row form-inline" *ngFor="let player of players; let i = index">
+                    <div class="col-sm-4 input-group">
+                        <input class="custom-checkbox ml-1 mr-1" type="checkbox" value="{{player.id}}" (click)="selectParticipant($event.target.checked,player.id,player.firstName+' '+player.lastName)">
+                        <label>{{player.firstName+" "+player.lastName}}</label>
+                    </div>
+                  </div>
+          </div>
+        </div>       
+        <div class="form-group row">
+        <div class="col">
+          <label for="eventDate">Start Date</label>
+          <input readonly class="form-control"  placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()" >  
+        </div>
+        <div class="col">
+            <label for="eventDate">End Date</label>
+            <input readonly (blur)="checkValidation()" class="form-control" placeholder="yyyy-mm-dd" name="dp2" [(ngModel)]="model2" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()" >  
+          </div>
+      </div> 
+      <div *ngIf="dataValid===false" class="form-inline justify-content-center">
+          <small   class="form-text text-danger">The start date and end date is invalid.</small>
+      </div> 
+        <div class="form-group my-1 row my-2 align-middle"> 
+          <div class="col">
+              <label for="eventDate">Start Time</label>
+              <ngb-timepicker [(ngModel)]="time" name="startTime" [spinners]="spinners"></ngb-timepicker>
+        </div>
+          <div class="col">
+            <label for="eventDate">End Time</label>
+            <ngb-timepicker [(ngModel)]="time2"  name="endTime" [spinners]="spinners"></ngb-timepicker>
+          </div>       
+      </div>      
+      <div *ngIf="timeValid===false" class="form-inline justify-content-center">
+          <small   class="form-text text-danger">End time should be behind star time.</small>
+      </div>  
+        <div class="row justify-content-center">
+          <button (click)="submitEvent()" class="btn btn-outline-success hid-div-button" [disabled]="!eventForm.valid">Submit</button>
+          <button (click)="cancel()" class="btn btn-outline-danger hid-div-button">Cancel</button>
+        </div> 
+      </form>
+    </div>
+    <div class="container">
+        <div class="form-inline text-center align-items-start">
+            <div class="col-sm-4 my-2" *ngFor="let event of events; let i = index">
+            <div class="card border-0 align-top font-weight-light">
+                <div class="card-body p-2 my-0 bg-light text-secondary text-left" ngbDropdown #myDrop="ngbDropdown"  autoClose="outside">
+                   <div class="row">
+                     <div class="col">     
+                      <ul class="list-group bg-light">
+                          <li class="p-1 list-group-item bg-light border-0 font-weight-bold"><h5 class="card-title">{{event.place}}</h5> </li>
+                          <li class="p-1 list-group-item bg-light border-0 font-weight-bold"><small *ngIf="event.type==='Game'" class="text-secondary">{{event.participant}}</small> </li>
+                          <li class="p-1 list-group-item bg-light text-success border-0 font-weight-bold">{{event.startTime}}</li>
+                          <li class="p-1 list-group-item bg-light text-success border-0 font-weight-bold">{{event.endTime}}</li>
+                        </ul> 
+                      </div>
+                      <div class="col border-0 text-center align-middle"
+                      [ngClass]="{'icon-games':event.type==='Game',
+                                  'icon-other':event.type==='Others',
+                                  'icon-trainings':!(event.type==='Other'||event.type==='Game')}">
+                                  <h5 class="text-dark">{{event.name}}</h5>
+                      </div>
+                   </div>
+
+                    <a style="cursor: pointer;" class="float-right text-primary align-self-end font-weight-bold" name="eventOptions" ngbDropdownToggle >Options</a>
+                    <div ngbDropdownMenu aria-labelledby="eventOptions" class="bg-transparent border-0">
+                        <ul *ngIf="user.type==='0'" class="list-group bg-white list-group-flush">
+                          <li class="options btn-outline-success list-group-item  font-weight-bold" (click)="updateEvent(event.id)">Update</li>
+                          <li (click)="deleteEvent(event.id)" class="options btn-outline-danger list-group-item  font-weight-bold">Delete</li>
+                        </ul> 
+                      </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="container-fluid my-3" *ngIf="totalPage>1">
+        <nav aria-label="Page navigation ">
+          <ul class="pagination text-success justify-content-center">
+            <li [ngClass]="{'disabled':page===1}"class="page-item text-success"><a class="page-link" (click)="toPage(-1)">Previous</a></li>
+            <li  *ngFor="let p of pages, let i= index"class="page-item btn-outline-success" ><a class="page-link " (click)="jumpPage(i+1)" [ngClass]="{'bg-success text-white':page===i+1}">{{i+1}}</a></li>
+            <li [ngClass]="{'disabled':page===totalPage}" class="page-item"><a class="page-link" (click)="toPage(1)">Next</a></li>
+          </ul>
+        </nav>    
+      </div>
+  </div>

@@ -1,0 +1,54 @@
+.slide-image{
+    background-size: auto;
+    background-repeat: no-repeat;
+    height: 300px;
+}
+.hid-div-button{
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.card-image-big{
+    height: 10rem;width:10rem;
+    background-size: 10rem 10rem;
+    background-position: center center;
+    text-align: center
+}
+.icon-games{
+    background-size: 15%;
+    background-position: 5% center;
+    background-repeat: no-repeat;
+    background-image: url("../../icons/game.png");
+}
+.icon-trainings{
+    background-size: 20%;
+    background-position: 5% center;
+    background-repeat: no-repeat;
+    background-image: url("../../icons/training.svg");
+}
+.icon-other{
+    background-size: 15%;
+    background-position: 5% center;
+    background-repeat: no-repeat;
+    background-image: url("../../icons/others.png");
+}
+.page-link:hover{
+    cursor: pointer;
+}
+.options:hover{
+    cursor: pointer;
+}
+.flag-icon{
+    background-image: url("../../icons/flag.png");
+    background-size: 1rem 1rem;
+    height: 1rem;
+    width: 1rem;
+}
+.list-button:hover{
+    background: green !important;
+    color:white !important;
+    cursor: pointer;
+}
+
+.news-pannel:hover{
+    background-color: rgba(0,0,0,.2);
+}

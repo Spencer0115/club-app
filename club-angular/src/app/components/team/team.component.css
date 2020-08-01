@@ -1,0 +1,43 @@
+.image_table{
+    height: 3rem;
+    margin: 0;
+    border-radius: 50%;
+}
+.td_image{
+    text-align: center;
+    vertical-align: middle;
+    display: inline-block;
+}
+table th,td{
+    text-align: center;
+    vertical-align: middle;
+}
+.card-image-big{
+    height: 10rem;
+    width: 10rem;
+    background-size: 10rem 10rem;
+    border-radius: 50%;
+    background-position: center center;
+    text-align: center;
+    display: block;
+}
+.sport_back{
+    position: relative;
+    height: 50rem;
+    width: 100%;
+    background-image: url("../../icons/back_football.jpg");
+    background-size: cover;
+}
+.sport_back_front{
+    position: relative;
+    height: 50rem;
+    width: 100%;
+    background-color: rgba(0,0,0,0.7);
+    background-size: cover;
+}
+.options:hover{
+    cursor: pointer;
+}
+button{
+    cursor: pointer;
+}

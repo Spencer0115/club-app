@@ -1,0 +1,8 @@
+export class MessageDetail{
+    id:number;
+    messageId:number;
+    receiverId:number;
+    senderId:number;
+    time:string;
+    content:number;
+}

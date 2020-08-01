@@ -1,0 +1,30 @@
+<body class="bg-white">
+<nav class="navbar navbar-expand-xl navbar-dark bg-dark border-bottom border-secondary" >
+    <button class="navbar-toggler" (click)="isCollapsed = !isCollapsed"
+    [attr.aria-expanded]="!isCollapsed" aria-controls="navbarSupportedContent"
+    type="button" data-toggle="collapse" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" [ngbCollapse]="isCollapsed"id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto nav-bar ml-5">      
+        <li class="nav-item text-center my-2 ml-2 mr-2" *ngFor="let menu of menus">
+          <a class="nav-link" routerLink="/user/{{menu.url | lowercase}}" routerLinkActive="active"><h4>{{menu.name}}</h4></a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0 ml-auto justify-content-center">
+        <img class="rounded-circle mr-3 card-image-small"  [src]="picSrc+user.profile" alt=""/>
+        <label *ngIf="user.type==='0'" class="navbar-brand">{{user.club_clubName | uppercase}}</label>
+        <label *ngIf="user.type==='1'" class="navbar-brand">{{user.firstName | uppercase}}</label>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" (click)="doLogout()">Logout</button>
+      </form>
+    </div>
+    </nav>
+    <div class="container-fluid bg-white" style="min-height: 40rem">
+        <router-outlet></router-outlet>
+
+    </div>   
+  <div class="container-fluid bg-dark" style="height: 10rem;">
+
+  </div>
+  </body>

@@ -1,0 +1,12 @@
+table th,tr{
+    text-align: center;
+}
+.card-image-big{
+    height: 10rem;
+    width: 10rem;
+    background-size: 10rem 10rem;
+    border-radius: 50%;
+    background-position: center center;
+    text-align: center;
+    display: block;
+}

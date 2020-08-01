@@ -1,0 +1,92 @@
+
+  <div class="container">     
+    <div class="row my-2">
+        <div class="col-auto mr-auto">
+             <h3 class="text-dark my-2"> {{team.name}}</h3>
+        </div>
+        <div class="col-auto">
+         <button *ngIf="user.type==='0'" (click)="backClicked()" class="btn btn-outline-primary ml-2">Back</button>
+        </div>          
+    </div>
+    <hr class="my-1">
+    <div class="row">
+    <div class="col-sm-3 text-center">
+      <div class="form-inline my-2 ">
+        <img  class="card-image-big my-1"[src]="picSrc+team.profile" alt="Card image cap">
+      </div>
+    </div>
+    <div class="col-auto mr-auto">
+          <ul class="list-group bg-white list-group-flush">
+              <li class="list-group-item bg-white border-0 text-success"><h4>Total Score {{team.totalScore}}</h4> </li>
+              <li class="list-group-item bg-white border-0 "><h4>{{team.sportName}}</h4></li>
+            </ul> 
+    </div>
+    <div class="col-auto position-relative">
+      <div *ngIf="user.type==='0'" class="btn-group my-2" role="group" >
+        <button type="button" class="btn btn-outline-success" (click)="sendMSGCick()">Send a Message</button>
+      </div>
+
+      <div class="card position-absolute" *ngIf="messageToggle==true" style="left:-10rem;width: 20rem" (blur)="messageToggle=false">
+          <div class="card-header">
+            <h5>Message</h5>
+          </div>
+          <div class="card-body form-inlin">To:
+            {{team.name}}
+            <hr class="my-1">
+            <textarea [(ngModel)]="message.content" required class="container-fluid font-weight-light" maxlength="100"></textarea>
+            </div>
+          <div class="card-footer form-inline">
+            <button type="button" class="btn btn-outline-success mr-auto"(click)="sendMSG()">Send</button>
+            <button type="button" class="btn btn-outline-danger ml-auto" (click)="messageToggle=false">Cancel</button>
+          </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    
+    <div class="container my-3" *ngIf="playerList.length>0">
+    <h3 class="text-dark my-2">Players</h3>
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Score</th>
+          </tr>
+        </thead>
+        <tbody class="font-weight-bold text-secondary">
+          <tr *ngFor="let player of playerList, let i = index" [ngClass]="{'bg-light':i%2==0}">
+            <td> 
+            <img  class="image_table" style="background:3.5rem;border-radius: 50%" [src]="picSrc+player.profile">
+              <div class="title   my-1">
+                      <a *ngIf="user.type==='0'" [routerLink]="['/user/club_player', player.id]" class="card-link text-primary">{{player.firstName + " " + player.lastName}}</a>
+                      <label *ngIf="user.type==='1'">{{player.firstName + " " + player.lastName}}</label>
+              </div>
+              </td>
+            <td>{{player.gender}}</td>
+            <td>{{player.score}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="container my-3" *ngIf="eventList.length>0">
+    <h3 class="my-2 text-dark">Events</h3>
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Time</th>
+            <th scope="col">Score</th>
+          </tr>
+        </thead>
+        <tbody class="font-weight-bold text-secondary">
+          <tr *ngFor="let event of eventList, let i = index" [ngClass]="{'bg-light':i%2==0}">
+            <td>{{event.name}}</td>
+            <td>{{event.type}}</td>
+            <td class="text-success">{{event.startTime}} - {{event.endTime}}</td>
+            <td>{{event.score}}</td>
+         </tr>
+        </tbody>
+      </table>
+     </div>

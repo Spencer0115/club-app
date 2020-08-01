@@ -1,0 +1,116 @@
+<div class="container ">  
+    <div class="row my-2">
+        <div class="col-auto mr-auto">
+             <h3 class="text-dark my-2"> {{player.firstName+" "+player.lastName}}</h3>
+        </div>
+        <div *ngIf="user.type==='0'" class="col-auto">
+         <button (click)="backClicked()" class="btn btn-outline-primary ml-2">Back</button>
+        </div>          
+    </div>
+    <hr class="my-1">
+    <div class="row">
+    <div class="col-sm-3 text-center">
+      <div class="card bg-white border-0 form-inline my-2 ">
+        <img  class="card-image-big my-1"[src]="picSrc+player.profile" alt="Card image cap">
+      </div>
+    </div>
+    <div class="col-auto mr-auto">
+      <div class="form-inline" *ngIf="!editProfile" >
+        <ul class="list-group bg-white list-group-flush text-dark" >
+          <li class="list-group-item bg-white border-0 p-0 my-3 font-weight-bold text-success"><h4>Total Score {{player.score}}</h4></li>
+          <li class="list-group-item bg-white border-0 p-0 my-2 font-weight-bold">Email : {{user_player.email}}</li>
+          <li class="list-group-item bg-white border-0 p-0 my-1 font-weight-bold">Club :    {{player.clubName}}</li>
+          <li class="list-group-item bg-white border-0 p-0 my-1 font-weight-bold">Team :    {{player.teamName}}</li>
+          <li class="list-group-item bg-white border-0 p-0 my-1 font-weight-bold">Gender :  {{player.gender}}</li>
+        </ul>
+      </div>
+      <div *ngIf="editProfile" class="">
+          <div class="form-group">
+              <label>First Name</label>
+              <input type="text" class="form-control" [(ngModel)]="user.firstName" >
+              <label>Last Name</label>
+              <input type="text" class="form-control" [(ngModel)]="user.lastName" >
+              <label >Gender</label>
+              <select class="form-control" [(ngModel)]="user.gender"> 
+                  <option *ngFor="let gender of genderCommon" value="{{gender.code}}">{{gender.name}}</option>
+              </select>
+              <br class="my-1">
+              <div class="form-inline justify-content-center">
+              <button type="button" class="btn btn-outline-success mr-auto" (click)="submitNewUserInfo()">Submit</button>
+              <button type="button" class="btn btn-outline-danger ml-auto" (click)="editProfile=false">Cancel</button>
+            </div>
+          </div>
+          </div>
+    </div>
+    <div class="col-auto position-relative">
+      <div class="btn-group my-2 ml-auto" role="group" >
+        <button *ngIf="user.type==='0'" class="btn btn-outline-success" (click)="sendMSGCick()">Send a Message</button>
+        <button *ngIf="user.type==='1'&&!editProfile" class="btn btn-outline-success" (click)="editProfile=true">Edit Profile</button>
+      </div>
+
+      <div class="card position-absolute" style="left:-10rem;width: 20rem"*ngIf="messageToggle==true" (blur)="messageToggle=false">
+          <div class="card-header">
+            <h5>Message</h5>
+          </div>
+          <div class="card-body form-inlin">To:
+            {{player.firstName}}
+            <hr class="my-1">
+            <textarea [(ngModel)]="message.content" required class="container-fluid font-weight-light" maxlength="100"></textarea>
+            </div>
+          <div class="card-footer form-inline">
+            <button type="button" class="btn btn-outline-success mr-auto"(click)="sendMSG()">Send</button>
+            <button type="button" class="btn btn-outline-danger ml-auto" (click)="messageToggle=false">Cancel</button>
+          </div>
+        </div>
+
+        <div class="card position-absolute" *ngIf="trainingToggle==true" (blur)="trainingToggle=false">
+            <div class="card-header">
+              <h5>Player Training</h5>
+            </div>
+            <div class="card-body form-inlin">Player:
+                {{player.firstName}}
+              <hr class="my-1">
+            </div>
+            <div class="card-footer form-inline">
+              <button type="button" class="btn btn-outline-success mr-auto" (click)="addTraining()">Add</button>
+              <button type="button" class="btn btn-outline-danger ml-auto" (click)="trainingToggle=false">Cancel</button>
+            </div>
+          </div>
+    </div>
+    </div>
+    </div>
+
+    <div class="container ">
+    <h3 class="my-2 text-dark">Events</h3>
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" (click)="reloadList('name')">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Place</th>
+            <th scope="col">Time</th>
+            <th scope="col" (click)="reloadList('score')">Score</th>
+            <th scope="col">Option</th>
+          </tr>
+        </thead>
+        <tbody class="text-secondary font-weight-bold">
+          <tr *ngFor="let event of eventList, let i = index" [ngClass]="{'bg-light':i%2==0}">
+            <td>{{event.name}}</td>
+            <td>{{event.type}}</td>
+            <td>{{event.place}}</td>
+            <td class="text-success">{{event.startTime}} - {{event.endTime}}</td>
+            <td class="justify-content-center" style="text-align: center">
+              <label  *ngIf="event.type==='Game'" id="score_{{event.id}}">{{event.score}}</label>
+              <input  [(ngModel)]="event.score" style="display: none;" type="text"  class="mr-auto ml-auto form-control col-sm-5" id="update_{{event.id}}">
+            </td>
+            <td>
+              <a id="score_not_edtting_{{event.id}}" (click)="updateScoreClick(event.id,event.score)" *ngIf="event.type==='Game'"class="btn-link text-primary pointer-event" style="cursor: pointer;">Update Score</a>
+              <div id="score_edtting_{{event.id}}" style="display: none;text-align: center" class="input-group;text-center">
+                <a (click)="updateScore(event.id,event.score)" *ngIf="event.type==='Game'"class="mr-1 btn-link text-success pointer-event" style="cursor: pointer;">Save</a>
+                <a (click)="cancelUpdating(event.id)" *ngIf="event.type==='Game'" class="ml-1 btn-link text-danger pointer-event" style="cursor: pointer;">Cancel</a>
+            </div>
+            </td>
+         </tr>
+        </tbody>
+      </table>
+     </div>

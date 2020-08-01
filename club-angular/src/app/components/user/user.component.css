@@ -1,0 +1,13 @@
+ul.menu-list>li:hover{
+    cursor: pointer;
+    background-color:green;
+    color:white;
+}
+ul.nav-bar>li:hover{
+    color:green;
+}
+.card-image-small{
+    height: 3rem;width:3rem;
+    background-size: 3rem 3rem;
+    background-position: center center;
+}

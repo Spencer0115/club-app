@@ -1,0 +1,52 @@
+<body>
+    <nav class="navbar navbar-dark bg-dark justify-content-between">
+            <h4 class="navbar-brand">Welcome</h4>
+            <form class="form-inline">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" routerLink="/signUp">Sign Up</button>
+            </form>
+        </nav>    
+       <div class="container" style="min-height: 26rem;">
+      <div class="row align-content-center" style="min-height: 26rem">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto mt-auto">
+          <div class="card card-signin bg-light border-0" style="border-radius: 0%">
+            <div class="card-body text-center">
+            <h4 class="d-inline-block my-2">Login</h4>
+              <hr class="my-3">
+              <form class="form-signin">
+                <div class="form-label-group my-3">
+                    <input type="text" id="inputName" name="name" class="form-control" [(ngModel)]="user.username"  placeholder="Email" required autofocus>
+                </div>
+                <h1></h1>
+                <div class="form-label-group my-3">
+                    <input type="password" id="inputPassword" name="password" class="form-control" [(ngModel)]="user.password" placeholder="Password" required>     
+                </div>
+                <button class="form-control btn btn-xl btn-success  text-uppercase mt-3" (click)="onsubmit()" type="submit">Sign in</button>                         
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid bg-dark position-absolute" style="bottom: 0;height:10rem;padding-bottom: 2rem">
+      <div class="row inline text-light bg-dark my-2">
+        <div class="col">
+          <img >
+        </div>
+        <div class="col ml-3">
+            <h5>Links</h5>
+            <ul  class="list-group">
+                <li class="list-group-item p-1 bg-dark  border-0" (click)="publishNewsClick()"><h6 class="font-weight-light"><a class="text-light font-weight-bold" href="https://github.com/Spencer0115/club_management">Github</a></h6></li>
+                <li class="list-group-item p-1 bg-dark  border-0" (click)="addCommonClick('e')"><h6 class="font-weight-light"></h6></li>
+                <li class="list-group-item p-1 bg-dark  border-0" (click)="addCommonClick('s')"><h6 class="font-weight-light"></h6></li>
+              </ul>
+        </div>
+
+        <div class="col">
+        </div>
+      </div>
+      <div class="row inline text-secondary bg-dark justify-content-center">
+          <small>Guolong Hu Copyright 2019</small> 
+      </div>
+    </div>
+  </body>

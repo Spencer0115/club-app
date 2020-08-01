@@ -1,0 +1,38 @@
+.hid-div-button{
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.card-image-big{
+    height: 6rem;
+    width: 6rem;
+    background-size: 6rem 6rem;
+    border-radius: 50%;
+    background-position: center center;
+    text-align: center;
+}
+.card-image-big:hover{
+    cursor: pointer;
+}
+.image_focus:hover{
+    background-size: 7rem 7rem;
+    background-position: center center;
+}
+
+.team_info{
+    display: inline-block;
+    text-align: left;
+    font-size: 10;
+    border-left: 1rem
+}
+.info-bar{
+    border-radius: 5%;
+    border-left: 0.5rem;
+}
+.page-link:hover{
+    cursor: pointer;
+}
+
+.card-focus:hover{
+    color:white;
+    cursor: pointer;
+}

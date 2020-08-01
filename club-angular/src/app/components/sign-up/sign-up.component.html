@@ -1,0 +1,130 @@
+<body>
+<nav class="navbar navbar-dark bg-dark justify-content-between">
+    <h4 class="navbar-brand">Sign Up</h4>
+    <form class="form-inline">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit" routerLink="/login">Login</button>
+    </form>
+</nav>
+  <div class="container my-2">
+          <form #signupForm="ngForm" (ngSubmit)="signUp()">
+            <div class="row justify-content-md-center">
+              <div class="form-group  col-sm-4">
+                <label class="col-form-label">Sign up as:</label>
+                  <div class="form-check form-check-inline">
+                      <input class="form-check-input ml-3" [(ngModel)]="user.type" type="radio" name="userType" id="userType0" checked value="0">
+                      <label class="form-check-label" for="inlineRadio1">club</label>
+                      <input class="form-check-input ml-3" [(ngModel)]="user.type" type="radio" name="userType" id="userType1" value="1">
+                      <label class="form-check-label" for="inlineRadio2">player</label>
+                  </div>
+                </div>
+            </div>
+
+              <div class="row justify-content-md-center">
+                <div class="form-group col-sm-4">
+                    <label class="col-form-label ">Email:</label>
+                    <div class="form-group ">
+                    <input class="form-control "  (blur)="checkEmail()" name="email" email required minlength="4" [(ngModel)]="user.email" #email="ngModel" placeholder="email@example.com">
+                    <small *ngIf="email.invalid && (email.dirty || email.touched)"  class="form-text text-muted">Please input correct email address.</small>
+                    <small *ngIf="repeated == true && (email.dirty || email.touched)"  class="form-text text-muted">This email has been used.</small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row justify-content-md-center">
+                <div *ngIf="user.type === '0'"  class="form-group col-sm-4">
+                    <label class="col-form-label ">Club Name:</label>
+                    <div class="form-group ">
+                    <input type="text" name="club_clubName" #clubClubName="ngModel" required minlength="4" maxlength="30" class="form-control" [(ngModel)]="user.club_clubName" placeholder="Club Name" >
+                    <small *ngIf="clubClubName.invalid && (clubClubName.dirty || clubClubName.touched)"  class="form-text text-muted">Club name has to be 4 characters at least.</small>
+                  </div>
+                </div> 
+              </div>
+
+              <div class="row justify-content-md-center">
+                <div *ngIf="user.type === '1'" class="form-group col-sm-4">
+                    <label class="col-form-label ">First Name:</label>
+                    <div class="form-group ">                     
+                      <input type="text" name="firstName" #firstName="ngModel" required class="form-control"  maxlength="30" [(ngModel)]="user.firstName" placeholder="First Name" >
+                      <small *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"  class="form-text text-muted">Please input your first name.</small>
+                    </div>                  
+                  </div>
+              </div>
+
+              <div class="row justify-content-md-center">             
+                <div *ngIf="user.type === '1'" class="form-group col-sm-4">
+                    <label class="col-form-label ">Last Name:</label>
+                    <div class="form-group ">
+                    <input type="text" name="lastName" #lastname="ngModel" required class="form-control" maxlength="30" [(ngModel)]="user.lastName" placeholder="Last Name" >
+                    <small *ngIf="lastname.invalid && (lastname.dirty || lastname.touched)" class="form-text text-muted">Please input you last name.</small>
+                  </div>                 
+                  </div> 
+              </div>
+              
+              <div class="row justify-content-md-center">                    
+                <div *ngIf="user.type === '1'" class="form-group col-sm-4">
+                    <label class="col-form-label">Club:</label>
+                    <select required class="form-control col-sm-8" name="clubList" [(ngModel)]="user.player_clubId" (ngModelChange)="updateTeamList()">
+                      <option *ngFor="let club of clubs" value="{{club.id}}">{{club.name}}</option>
+                    </select>
+                </div> 
+              </div>
+
+              <div class="row justify-content-md-center">  
+              <div *ngIf="user.type === '1'" class="form-group col-sm-4">
+                  <label class="col-form-label">Team:</label>
+                  <select required name="teamList" class="form-control col-sm-8" [(ngModel)]="user.player_teamId">
+                      <option  *ngFor="let team of teams" value="{{team.id}}">{{team.name}}</option>
+                  </select>
+              </div> 
+            </div>
+            <div class="row justify-content-md-center">  
+              <div *ngIf="user.type === '1'" class="form-group col-sm-4">
+                  <label class="col-form-label">Gender:</label>
+                  <select  class="form-control col-sm-8" name="userGender" [(ngModel)]="user.gender">
+                    <option *ngFor="let gender of genderCommon" value="{{gender.code}}">{{gender.name}}</option>
+                  </select>
+              </div>
+            </div>
+
+            <div class="row justify-content-md-center">  
+              <div class="form-group col-sm-4">
+                    <label class="col-form-label ">Password:</label>
+                    <div class="form-group ">
+                    <input type="password" name="password"  maxlength="16" #password="ngModel" minlength="6" class="form-control" [(ngModel)]="user.password" placeholder="Password" value="">
+                    <small *ngIf="password.invalid && (password.dirty || password.touched)"  class="form-text text-muted">Password is too short!</small>
+                  </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-md-center">  
+              <div class="form-group col-sm-4">
+                    <label class="col-form-label ">Confirm Password:</label>
+                    <div class="form-group ">
+                    <input type="password" name="rPassword" #rPassword="ngModel"  [(ngModel)]='user.confirmPassword' minlength="6" class="form-control"  placeholder="Confirm password">
+                    <small *ngIf="(!(password.value === rPassword.value))&&(rPassword.dirty || rPassword.touched)" class="form-text text-muted">Password and confirmation password do not match.</small>
+                  </div>
+              </div>
+            </div>
+
+            <div class="row justify-content-md-center">  
+              <div class="form-group col-sm-4">
+              <label class="col-form-label ">Profile Picture:</label>
+              <div class="input-group ">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" (change)="onFileChange($event)">
+                  <label class="custom-file-label">{{fileName}}</label>
+                </div>
+                <!-- <div class="input-group-append">
+                  <button class="btn btn-outline-secondary btn-outline-success" (click)="onUpload()" type="button">Upload</button>
+                </div> -->
+              </div>
+            </div>
+            </div>
+              <br class="my-2">
+              <div style="text-align: center;">
+                  <button type="submit"  class="col-sm-3 btn form-control btn btn-xl btn-outline-success" [disabled]="!signupForm.valid">Sign Up</button>
+              </div>
+              <br class="my-4">
+          </form>
+  </div>
+</body>
